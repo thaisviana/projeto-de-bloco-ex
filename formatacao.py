@@ -2,6 +2,7 @@ import pygame
 from constants import (branco, preto, red, darkBlue, largura_tela,
 altura_tela, infos)
 
+
 def mostra_titulo(tela, texto, x, y, tamanho_fonte=18):
       font = pygame.font.SysFont("impact", tamanho_fonte)
       text = font.render(texto, 1, preto)

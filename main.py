@@ -1,10 +1,10 @@
-import pygame, random
+import pygame
 from aba import Aba
 import os
 import time
 from constants import (branco, preto, red, darkBlue, largura_tela,
 altura_tela, infos)
-from formatacao import mostra_titulo, mostra_titulo_aba
+from formatacao import mostra_titulo
 
 #Inicialização da fonte
 pygame.font.init()
@@ -15,7 +15,6 @@ soma_rss = sum([i["rss"] for i in infos])/1024/1024/1024
 soma_vms = sum([i["vms"] for i in infos])/1024/1024/1024
 soma = 0
 soma_media = 0
-titulo = ["ARQUIVOS", "PROCESSOS", "REDE 1", "REDE 2"]
 
 def formata_valores(soma):
     soma_indices = 1
@@ -30,15 +29,6 @@ def formata_valores(soma):
           mostra_titulo(tela, f'{round((rss/(soma_rss*1024))*100,2)} %',700, 160 + soma_indices*22)
           soma_indices = soma_indices + 1
 
-def cria_abas():
-    lista_de_abas = []
-    for i in range(0,4):
-        aba_type= i
-        aba = Aba(i, darkBlue)
-        aba.desenha(tela)
-        lista_de_abas.append(aba)
-        mostra_titulo_aba(tela, f"{titulo[i]}", (largura_tela/4 * aba_type)+100)
-    return lista_de_abas
 
 def mostra_conteudo_aba_0(conta_segundos):
     mostra_titulo(tela, f'ARQUIVOS - {conta_segundos}s',100, 100, 24)
@@ -69,16 +59,12 @@ def mostra_conteudo_aba_1(conta_segundos):
     formata_valores(soma)
     mostra_titulo(tela, f"Total de memoria RSS usada: {round(soma_rss,2)} Gb",100,870)
     mostra_titulo(tela, f"Total de memoria VMS usada: {round(soma_vms,2)} Gb",100,850)
-    
-def init_abas():
-    tela.fill(branco)
-    aba0, aba1, aba2, aba3 = cria_abas()
 
 conta_clocks = 0
 conta_segundos = 0
 
 tela.fill(branco)
-aba0, aba1, aba2, aba3 = cria_abas()
+aba0, aba1, aba2, aba3 = Aba.cria_abas(tela, darkBlue)
 mostra_conteudo_aba_0(conta_segundos)
 aba_selecionada = 0
 
@@ -95,20 +81,20 @@ while not terminou:
           if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
              pos = pygame.mouse.get_pos()
              if aba1.area.collidepoint(pos):
-                 init_abas()
+                 Aba.init_abas(tela, branco, darkBlue)
                  aba_selecionada = 1
                  mostra_conteudo_aba_1(conta_segundos)
              if aba2.area.collidepoint(pos):
                  aba_selecionada = 2
-                 init_abas()
+                 Aba.init_abas(tela, branco, darkBlue)
                  mostra_titulo(tela, f'ABA 2 | {conta_segundos}s',100, 300, 24)
              if aba3.area.collidepoint(pos):
                  aba_selecionada = 3
-                 init_abas()
+                 Aba.init_abas(tela, branco, darkBlue)
                  mostra_titulo(tela, f'ABA 3 | {conta_segundos}s',100, 300, 24)
              if aba0.area.collidepoint(pos):
                  aba_selecionada = 0
-                 init_abas()
+                 Aba.init_abas(tela, branco, darkBlue)
                  mostra_conteudo_aba_0(conta_segundos)
       conta_clocks += 1
       #A cada 50 cont_clocks, temos 1s (0,02s x 50 = 1s)
@@ -116,7 +102,7 @@ while not terminou:
           if conta_segundos >= 0:
               conta_segundos += 1
           conta_clocks = 0   
-          init_abas()
+          Aba.init_abas(tela, branco, darkBlue)
           if aba_selecionada == 0:
               mostra_conteudo_aba_0(conta_segundos)
           elif aba_selecionada == 1:
