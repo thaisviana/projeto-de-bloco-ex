@@ -1,4 +1,5 @@
 import pygame
+import psutil
 from aba import Aba
 import os
 import time
@@ -9,6 +10,7 @@ from formatacao import mostra_titulo
 #Inicialização da fonte
 pygame.font.init()
 terminou= False
+
 #Dimensões da tela
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 soma_rss = sum([i["rss"] for i in infos])/1024/1024/1024
@@ -18,17 +20,18 @@ soma_media = 0
 
 def formata_valores(soma):
     soma_indices = 1
-    for item in infos:
-          vms = item["vms"]/1024/1024
-          rss = item["vms"]/1024/1024
-          mostra_titulo(tela, f'{item["pid"]}',100, 160 + soma_indices*22)
-          mostra_titulo(tela, f'{item["nome"]}', 160, 160 + soma_indices*22)
-          mostra_titulo(tela, f'{round(vms,2)} MB',400, 160 + soma_indices*22)
-          mostra_titulo(tela, f'{round(rss,2)} MB',500, 160 + soma_indices*22)
-          mostra_titulo(tela, f'{round((vms/(soma_vms*1024))*100,2)} %',620, 160 + soma_indices*22)
-          mostra_titulo(tela, f'{round((rss/(soma_rss*1024))*100,2)} %',700, 160 + soma_indices*22)
-          soma_indices = soma_indices + 1
-
+    for p in psutil.process_iter():
+        if p.status() == "running":
+            vms = p.memory_info().vms/1024/1024
+            rss = p.memory_info().rss/1024/1024
+            mostra_titulo(tela, f'{p.pid}',100, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{p.name()}', 160, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{round(vms,2)} MB',400, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{round(rss,2)} MB',500, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{round((vms/(soma_vms*1024))*100,2)} %',620, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{round((rss/(soma_rss*1024))*100,2)} %',700, 160 + soma_indices*20)
+            soma_indices = soma_indices + 1
+        
 
 def mostra_conteudo_aba_0(conta_segundos):
     mostra_titulo(tela, f'ARQUIVOS - {conta_segundos}s',100, 100, 24)
@@ -41,11 +44,11 @@ def mostra_conteudo_aba_0(conta_segundos):
     soma_indices = 1
     for i in lista: 
         if os.path.isfile(i):
-            mostra_titulo(tela, f'{soma_indices}',40, 160 + soma_indices*22)
-            mostra_titulo(tela, f'{i}', 100, 160 + soma_indices*22)
-            mostra_titulo(tela, f'{round(os.stat(i).st_size/1024,2) }KB',240, 160 + soma_indices*22)
-            mostra_titulo(tela, f'{time.ctime(os.stat(i).st_mtime)}',340, 160 + soma_indices*22)
-            mostra_titulo(tela, f'{time.ctime(os.stat(i).st_atime)}',590, 160 + soma_indices*22)
+            mostra_titulo(tela, f'{soma_indices}',40, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{i}', 100, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{round(os.stat(i).st_size/1024,2) }KB',240, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{time.ctime(os.stat(i).st_mtime)}',340, 160 + soma_indices*20)
+            mostra_titulo(tela, f'{time.ctime(os.stat(i).st_atime)}',590, 160 + soma_indices*20)
             soma_indices += 1
 
 def mostra_conteudo_aba_1(conta_segundos):
