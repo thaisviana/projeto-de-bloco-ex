@@ -6,10 +6,26 @@ import time
 from constants import (branco, preto, red, darkBlue, largura_tela,
 altura_tela, infos)
 from formatacao import mostra_titulo
-#teste 2
+#teste 3
 #Inicialização da fonte
 pygame.font.init()
 terminou= False
+
+
+"""
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
+an unknown printer took a galley of type and scrambled it to make a type specimen
+book. It has survived not only five centuries, but also the leap into electronic t
+ypesetting, remaining essentially unchanged. It was popularised in the 1960s with
+the release of Letraset sheets containing Lorem Ipsum passages, and more recently
+with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."""
+
+
+
+
+
+
 
 #Dimensões da tela
 tela = pygame.display.set_mode((largura_tela, altura_tela))
@@ -121,3 +137,5 @@ while not terminou:
       clock.tick(50)
 #Finaliza a janela do jogo
 pygame.display.quit()
+
+
