@@ -6,7 +6,7 @@ import time
 from constants import (branco, preto, red, darkBlue, largura_tela,
 altura_tela, infos)
 from formatacao import mostra_titulo
-#teste
+#teste 2
 #Inicialização da fonte
 pygame.font.init()
 terminou= False
